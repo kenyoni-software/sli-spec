@@ -3,6 +3,7 @@
 **Version: 1.0-DRAFT**  
 **Authored by** Iceflower <iceflower@iceflower.eu>  
 **Maintainer:** Kenyoni Software <software@kenyoni.eu>  
+**Repository:** [github.com/kenyoni-software/sli-spec](https://github.com/kenyoni-software/sli-spec)  
 **License:** CC BY 4.0
 
 ## 1 Overview & Purpose

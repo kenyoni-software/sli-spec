@@ -53,9 +53,9 @@ A prefix **should** be used when the localization system requires clear differen
 
 The scope is an optional component that groups related SLIs and provides semantic context to prevent naming collisions. It represents a stable functional boundary, such as a feature module, a major UI section, a delivery channel or a message category. Using a scope allows keys to remain short while still being unambiguous within their context.
 
-Scopes **must** consist of one or more components separated by slashes (`/`), with each component composed of lowercase letters (`a–z`), digits (`0–9`) or underscores (`_`). Empty components **must not** be used (for example, `ui//buttons`) and a scope **must not** begin or end with a slash. When present, the scope **must** be followed by a literal dot (`.`) that separates it from the key.
+Scopes **must** consist of one or more components separated by slashes (`/`), with each component composed of lowercase letters (`a–z`), digits (`0–9`) or underscores (`_`). Empty components **must not** be used (for example, `ui//button`) and a scope **must not** begin or end with a slash. When present, the scope **must** be followed by a literal dot (`.`) that separates it from the key.
 
-Top-level scopes **should** be limited and stable. Scopes **may** map to durable product boundaries (features, major UI areas or channels). Ad-hoc scopes and deep nesting **should** be avoided, as they increase fragmentation and make reuse harder. Sub-scopes **may** be used to reflect presentation structure, such as `labels`, `buttons` or `tooltips`, but **should not** encode implementation-specific variants or technical details (for example, prefer `buttons` over `texture_buttons` or `animated_buttons`).  
+Top-level scopes **should** be limited and stable. Scopes **may** map to durable product boundaries (features, major UI areas or channels). Ad-hoc scopes and deep nesting **should** be avoided, as they increase fragmentation and make reuse harder. Sub-scopes **may** be used to reflect presentation structure, such as `label`, `button` or `tooltip`, but **should not** encode implementation-specific variants or technical details (for example, prefer `button` over `texture_button` or `animated_button`). Scope names **should** use singular nouns (for example `button` instead of `buttons`).  
 If the localization framework supports pluralization or grammatical gender natively, those mechanisms **should** be used. Sub-scopes for gender variants (for example `female`, `male` or `neutral`) or pluralization (for example `one` or `other`) **may** be used only when the framework provides no native support for these forms. The set of plural sub-scopes **should** cover all CLDR plural categories required across all target languages of the product. For example, while English requires only `one` and `other`, Arabic requires `zero`, `one`, `two`, `few`, `many` and `other`. Languages that do not distinguish all defined forms **may** map multiple sub-scopes to identical translations.
 
 ### 3.3 Key
@@ -103,62 +103,63 @@ Each example line below represents a separate product.
 
 ### 5.2 Scopes
 
-- `ui/common/buttons.cancel`: `Cancel` — Common cancel button in shared UI components.
-- `ui/common/buttons.submit`: `Submit` — Primary submit action for forms.
-- `ui/dashboard/greetings.welcome_{username}`: `Welcome, {username}!` — Personalized dashboard greeting.
-- `ui/settings/pages.title`: `Settings` — Title of the settings page.
-- `marketing/campaigns/email_subjects.welcome`: `Welcome to our product!` — Welcome email subject.
-- `marketing/footers.unsubscribe_instructions`: `To unsubscribe, click {unsubscribe_link}.` — Footer with link placeholder.
+- `ui/common/button.cancel`: `Cancel` — Common cancel button in shared UI components.
+- `ui/common/button.submit`: `Submit` — Primary submit action for forms.
+- `ui/dashboard/greeting.welcome_{username}`: `Welcome, {username}!` — Personalized dashboard greeting.
+- `ui/setting/page.title`: `Settings` — Title of the settings page.
+- `marketing/campaign/email_subjects.welcome`: `Welcome to our product!` — Welcome email subject.
+- `marketing/footer.unsubscribe_instructions`: `To unsubscribe, click {unsubscribe_link}.` — Footer with link placeholder.
 
 ### 5.3 With prefix
 
 - `~cancel`: `Cancel` — Cancel button text. With `~` prefix.
-- `@ui/common/buttons.cancel`: `Cancel` — Cancel button text. Scoped with `@` prefix.
-- `#notifications/inbox/messages.no_new`: `You have no new messages.` — Inbox empty-state. `#` prefix variant.
+- `@ui/common/button.cancel`: `Cancel` — Cancel button text. Scoped with `@` prefix.
+- `#notification/inbox/message.no_new`: `You have no new messages.` — Inbox empty-state. `#` prefix variant.
 
 ### 5.4 Placeholders
 
-- `product/details.price_value_{currency}_{amount}`: `{currency} {amount}` — Product price display, e.g. `EUR 19.99`. Using curly braces as placeholder syntax.
-- `product/details.price_value_{{currency}}_{{amount}}`: `{{currency}} {{amount}}` — Product price display, e.g. `EUR 19.99`. Using double curly braces as placeholder syntax.
+- `product/detail.price_value_{currency}_{amount}`: `{currency} {amount}` — Product price display, for example `EUR 19.99`. Using curly braces as placeholder syntax.
+- `product/detail.price_value_{{currency}}_{{amount}}`: `{{currency}} {{amount}}` — Product price display, for example `EUR 19.99`. Using double curly braces as placeholder syntax.
 - `order/confirmation.number_{order_id}`: `Order #{order_id} confirmed.` — Order confirmation with id.
-- `auth/errors.invalid_login_{attempts}`: `Sign in failed. {attempts} attempt(s) remaining.` — Error with dynamic count.
-- `help/messages.contact_us_{email_link_text}`: `For support, please contact us at {email_link_text}.` — The `{email_link_text}` placeholder becomes an inline clickable label when rendered.
+- `auth/error.invalid_login_{attempts}`: `Sign in failed. {attempts} attempt(s) remaining.` — Error with dynamic count.
+- `help/message.contact_us_{email_link_text}`: `For support, please contact us at {email_link_text}.` — The `{email_link_text}` placeholder becomes an inline clickable label when rendered.
 
 ### 5.5 Plural / gender / cardinality as sub-scope
 
-- `product/reviews/one.summary`: `Based on 1 review.` — Singular plural form as sub-scope.
-- `product/reviews/other.summary_{count}`: `Based on {count} reviews.` — Plural form with count placeholder.
-- `profile/greetings/female/{last_name}`: `Welcome back, Ms. {last_name}.` — Gender-specific sub-scope example.
-- `profile/greetings/male/{last_name}`: `Welcome back, Mr. {last_name}.` — Gender-specific sub-scope example.
-- `profile/greetings/neutral/{last_name}`: `Welcome back, {last_name}.` — Neutral fallback sub-scope.
+- `product/review/one.summary`: `Based on 1 review.` — Singular plural form as sub-scope.
+- `product/review/other.summary_{count}`: `Based on {count} reviews.` — Plural form with count placeholder.
+- `profile/greeting/female/{last_name}`: `Welcome back, Ms. {last_name}.` — Gender-specific sub-scope example.
+- `profile/greeting/male/{last_name}`: `Welcome back, Mr. {last_name}.` — Gender-specific sub-scope example.
+- `profile/greeting/neutral/{last_name}`: `Welcome back, {last_name}.` — Neutral fallback sub-scope.
 
 ### 5.6 Variants
 
-- `error/messages.server_connection_failed_short`: `Disconnected.` — Brief system status.
-- `error/messages.server_connection_failed_long`: `Could not connect to the server. Please check your internet connection.` — Detailed troubleshooting message.
-- `notifications/email_subjects.welcome_short`: `Welcome!` — Short email subject.
-- `notifications/email_subjects.welcome_long`: `Welcome to ExampleApp — let’s get you started` — Longer subject for marketing variant.
+- `error/message.server_connection_failed_short`: `Disconnected.` — Brief system status.
+- `error/message.server_connection_failed_long`: `Could not connect to the server. Please check your internet connection.` — Detailed troubleshooting message.
+- `notification/email_subject.welcome_short`: `Welcome!` — Short email subject.
+- `notification/email_subject.welcome_long`: `Welcome to ExampleApp — let’s get you started` — Longer subject for marketing variant.
 
 ### 5.7 Common UI labels / links / tooltips
 
-- `ui/user_profile/labels.email_address`: `Email address` — Label for email input.
-- `auth/links.forgot_your_password`: `Forgot your password?` — Auth screen link text.
-- `ui/modal/prompts.delete_confirmation`: `Are you sure you want to delete this?` — Modal confirmation prompt.
-- `legal/links.terms_of_service`: `Terms of Service` — Legal link text.
+- `ui/user_profile/label.email_address`: `Email address` — Label for email input.
+- `auth/link.forgot_your_password`: `Forgot your password?` — Auth screen link text.
+- `ui/modal/prompt.delete_confirmation`: `Are you sure you want to delete this?` — Modal confirmation prompt.
+- `legal/link.terms_of_service`: `Terms of Service` — Legal link text.
 
 ### 5.8 Invalid / disallowed examples
 
-- `UI/Buttons.Cancel`: `Cancel` — Uses uppercase letters in scope and key (keys/scopes **must** be lowercase).
-- `ui//buttons.cancel`: `Cancel` — Empty scope component (no `//` allowed).
-- `ui/buttons cancel`: `Cancel` — Contains a space in key (only `a–z`, `0–9`, `_` and placeholders allowed).
-- `ui/buttons..cancel`: `Cancel` — Malformed (extra dot or empty key component).
-- `ui/buttons.cancel{size-number}`: `Cancel` — Hyphen used inside placeholder-like token, placeholders names **must** contain only `a–z`, `0–9`, `_`.
-- `ui/buttons.cancel_{}`: `Cancel` — Empty placeholder (`{}`) is not allowed.
-- `ui/buttons.cancel_{UserName}`: `Cancel {UserName}` — Placeholder contains uppercase letters, **must** be lowercase.
-- `ui/buttons.cancel_@UserName@`: `Cancel @UserName@` — Placeholder uses reserved characters (`@`).
-- `ui/buttons.cancel_{username}`: `Cancel {user}` — Placeholders do not match between key and translation (`{username}` vs `{user}`).
-- `@ui/buttons.cancel` and `ui/buttons.cancel` — Do not mix prefixed and unprefixed SLIs within the same product.
-- `@ui/buttons.cancel_{username}` and `ui/buttons.ok_{{username}}` — Do not mix different placeholder delimiter syntaxes within the same product.
+- `UI/Button.Cancel`: `Cancel` — Uses uppercase letters in scope and key (keys/scopes **must** be lowercase).
+- `ui//button.cancel`: `Cancel` — Empty scope component (no `//` allowed).
+- `ui/button cancel`: `Cancel` — Contains a space in key (only `a–z`, `0–9`, `_` and placeholders allowed).
+- `ui/button..cancel`: `Cancel` — Malformed (extra dot or empty key component).
+- `ui/buttons.cancel`: `Cancel` — Uses plural form of `button` in scope, which is not recommended.
+- `ui/button.cancel{size-number}`: `Cancel` — Hyphen used inside placeholder-like token, placeholders names **must** contain only `a–z`, `0–9`, `_`.
+- `ui/button.cancel_{}`: `Cancel` — Empty placeholder (`{}`) is not allowed.
+- `ui/button.cancel_{UserName}`: `Cancel {UserName}` — Placeholder contains uppercase letters, **must** be lowercase.
+- `ui/button.cancel_@UserName@`: `Cancel @UserName@` — Placeholder uses reserved characters (`@`).
+- `ui/button.cancel_{username}`: `Cancel {user}` — Placeholders do not match between key and translation (`{username}` vs `{user}`).
+- `@ui/button.cancel` and `ui/buttons.cancel` — Do not mix prefixed and unprefixed SLIs within the same product.
+- `@ui/button.cancel_{username}` and `ui/buttons.ok_{{username}}` — Do not mix different placeholder delimiter syntaxes within the same product.
 
 ## 6 Definitions
 

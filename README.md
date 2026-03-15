@@ -46,3 +46,5 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 ## Specification
 
 The full specification is in [spec.md (1.0-draft)](./spec.md).
+
+Minor editorial changes, such as typo fixes or rewording that does not change the intended meaning, may be made without notice. Breaking changes will always be documented.

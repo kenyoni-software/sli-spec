@@ -16,11 +16,11 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 @ui/dashboard/greeting.welcome_{username}
 ```
 
-| Part   | Value                    | Optional |
+| Part   | Value                   | Optional |
 | ------ | ----------------------- | -------- |
-| Prefix | `@`                      | Yes      |
+| Prefix | `@`                     | Yes      |
 | Scope  | `ui/dashboard/greeting` | Yes      |
-| Key    | `welcome_{username}`     | No       |
+| Key    | `welcome_{username}`    | No       |
 
 ## Key Features
 

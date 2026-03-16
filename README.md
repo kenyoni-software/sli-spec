@@ -13,13 +13,13 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 ```
 
 ```text
-@ui/dashboard/greetings.welcome_{username}
+@ui/dashboard/greeting.welcome_{username}
 ```
 
 | Part   | Value                    | Optional |
-| ------ | ------------------------ | -------- |
+| ------ | ----------------------- | -------- |
 | Prefix | `@`                      | Yes      |
-| Scope  | `ui/dashboard/greetings` | Yes      |
+| Scope  | `ui/dashboard/greeting` | Yes      |
 | Key    | `welcome_{username}`     | No       |
 
 ## Key Features
@@ -37,14 +37,22 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 
 | SLI                                             | Translation                                                             |
 | ----------------------------------------------- | ----------------------------------------------------------------------- |
-| `ui/common/buttons.cancel`                      | Cancel                                                                  |
-| `ui/dashboard/greetings.welcome_{username}`     | Welcome, {username}!                                                    |
-| `auth/errors.invalid_login_{attempts}`          | Sign in failed. {attempts} attempt(s) remaining.                        |
-| `#error/messages.server_connection_failed_short` | Disconnected.                                                           |
-| `@error/messages.server_connection_failed_long` | Could not connect to the server. Please check your internet connection. |
+| `ui/common/button.cancel`                       | Cancel                                                                  |
+| `ui/dashboard/greeting.welcome_{username}`      | Welcome, {username}!                                                    |
+| `auth/error.invalid_login_{attempts}`           | Sign in failed. {attempts} attempt(s) remaining.                        |
+| `#error/message.server_connection_failed_short` | Disconnected.                                                           |
+| `@error/message.server_connection_failed_long`  | Could not connect to the server. Please check your internet connection. |
 
 ## Specification
 
-The full specification is in [spec.md (1.0-draft)](./spec.md).
+The full specification is in [spec.md](./spec.md).
 
 Minor editorial changes, such as typo fixes or rewording that does not change the intended meaning, may be made without notice. Breaking changes will always be documented.
+
+## Best Practices
+
+Document:
+
+- the prefix character in use (if any)
+- placeholder syntax (if embedded placeholders are used)
+- common scope naming conventions and patterns (e.g. `ui/`, `auth/`, `error/`)

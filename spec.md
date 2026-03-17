@@ -18,7 +18,7 @@ Terminology in this document follows RFC 2119:
 
 - **MUST** / **MUST NOT** indicate normative requirements
 - **SHOULD** / **SHOULD NOT** indicate recommendations
-- **MAY** / **MAY NOT** indicate purely optional behavior
+- **MAY** indicate purely optional behavior
 
 ## 2 Semantic Localization Identifier
 
@@ -34,7 +34,7 @@ A Semantic Localization Identifier (SLI) **MUST** follow this structure:
 
 Each SLI **MUST** be unique within a project.  
 SLIs are stable identifiers and **MUST** remain unchanged in any released, distributed, or otherwise published version of the project, because changing them breaks the link between code and translations. Translations **MAY** be updated at any time. During development prior to release, SLIs **MAY** be changed freely.  
-SLIs **MUST NOT** encode presentation rules, such as capitalization, punctuation, or specific formatting instructions, as part of the identifier itself. Such elements **MUST** be handled in a separate UI/UX style guide to maintain a clean separation between string identity and visual display. SLIs **MAY**, however, reflect presentation context indirectly through scope or key structure.  
+SLIs **MUST NOT** encode presentation rules, such as capitalization, punctuation, or specific formatting instructions, as part of the identifier itself. Such elements **MUST** be handled in a separate UI/UX style guide to maintain a clean separation between string identity and visual display. SLIs **MAY**, however, reflect presentation context indirectly through scope (for example: using a `button` scope to indicate the string is a button label, from which a style guide may then derive that it should be title case).  
 SLIs **SHOULD** be kept as short as possible while remaining semantically clear. Excessively long identifiers reduce readability and can cause issues with tooling or platforms that impose key length limits.  
 SLIs **SHOULD** be human-readable and semantically meaningful to developers and translators. Cryptic abbreviations or opaque identifiers **SHOULD** be avoided. Context **SHOULD** be provided via scope or descriptive keys rather than relying on external documentation.
 
@@ -44,7 +44,7 @@ SLIs **SHOULD** be human-readable and semantically meaningful to developers and 
 
 The prefix is an optional component at the start of an SLI. Its purpose is to syntactically mark identifiers as translatable and provide a consistent token that allows tools and scripts to reliably extract SLIs from source code or templates. When used, the prefix does not change the semantic meaning of the identifier. It is purely structural.
 
-Prefixes **MUST** be exactly one character from the set `@`, `~`, or `#` and **MUST** appear at the very beginning of the identifier. Within a project, either all SLIs **MUST** use the same prefix character or all SLIs **MUST NOT** include a prefix. Mixing different prefixes or mixing prefixed and unprefixed SLIs **MUST NOT** occur. The chosen prefix character **MUST NOT** appear in the placeholder syntax (see Section 3.3).
+Prefixes **MUST** be exactly one character from the set `@`, `~`, or `#` and **MUST** appear at the very beginning of the identifier. Within a project, either all SLIs **MUST** use the same prefix character or all SLIs **MUST NOT** include a prefix. A project **MUST NOT** mix different prefix characters or mix prefixed and unprefixed SLIs. If a prefix is used, the chosen prefix character **MUST NOT** appear in the placeholder syntax (see Section 3.3).
 
 A prefix **SHOULD** be used when the localization system requires clear differentiation between translatable identifiers and other keys or strings, or when scanning source code for SLIs automatically.
 
@@ -59,17 +59,17 @@ If the localization framework supports pluralization or grammatical gender nativ
 
 ### 3.3 Key
 
-The key is a required component that uniquely identifies a translatable string within its scope. Placeholders embedded in the key represent dynamic runtime values. Embedding placeholders in the key helps translators identify required dynamic values directly from the identifier and enables direct fallback substitution. When no translation is available, the raw SLI remains functional and testable. Placeholders are framework-agnostic and thus the placeholder syntax may differ between projects.
+The key is a required component that uniquely identifies a translatable string within its scope. Placeholders embedded in the key represent dynamic runtime values. Embedding placeholders in the key helps translators identify required dynamic values directly from the identifier and enables direct fallback substitution. When no translation is available, the raw SLI remains functional and testable. Placeholders are framework-agnostic. The placeholder syntax may therefore vary between projects.
 
-Keys **MUST** consist of lowercase letters (`a-z`), digits (`0-9`), underscores (`_`), and placeholders. Keys **MUST NOT** be empty. Embedding placeholders in keys **SHOULD** be preferred, especially when the raw SLI may be rendered directly as fallback text. Within a project, placeholders **MUST** either always be embedded or never embedded. When placeholders are embedded, every translation **MUST** contain all placeholders defined in the key, neither omitting nor adding any. Placeholders **MAY** be reordered in the translation text to accommodate different grammatical structures in various languages.  
-The localization framework's native placeholder syntax **SHOULD** be used, but **MUST NOT** contain the structural characters `/` and `.`. The chosen prefix character **MUST NOT** be used in the placeholder syntax, to ensure the prefix remains unambiguous. If the framework's syntax conflicts with all available prefix characters (`@`, `~`, `#`) or reserved characters (`/`, `.`), curly braces `{name}` **SHOULD** be used as delimiters. If neither the native syntax nor curly braces are viable, an arbitrary syntax **MAY** be used or placeholders **MAY** be used in translations only and omitted from keys entirely. Placeholders **MUST NOT** contain framework-specific formatting metadata. Names for named placeholders **MUST** contain only lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`) and **MUST NOT** be empty.
+Keys **MUST** consist of lowercase letters (`a-z`), digits (`0-9`), underscores (`_`), and placeholders. Keys **MUST NOT** be empty. Keys **MUST** either contain all placeholders when a string has dynamic values, or contain no placeholders at all. Embedding placeholders in keys **SHOULD** be preferred, especially when the raw SLI may be rendered directly as fallback text. When placeholders are embedded, every translation **MUST** contain all placeholders defined in the key, neither omitting nor adding any. Placeholders **MAY** be reordered in the translation text to accommodate different grammatical structures in various languages. Placeholders in the key **MUST** only identify the dynamic runtime value and **MUST NOT** contain formatting instructions. Translations **MAY** include formatting instructions within their placeholders.  
+A project **MUST** use a single, consistent placeholder syntax throughout. The localization framework's native placeholder syntax **SHOULD** be used, but **MUST NOT** contain the structural characters `/` and `.`. The chosen prefix character **MUST NOT** be used in the placeholder syntax, to ensure the prefix remains unambiguous. If the framework's syntax conflicts with all available prefix characters (`@`, `~`, `#`) or reserved characters (`/`, `.`), curly braces `{name}` **SHOULD** be used as delimiters. If neither the native syntax nor curly braces is viable, an arbitrary syntax **MAY** be used or placeholders **MAY** be used in translations only and omitted from keys entirely. Names for named placeholders **MUST** contain only lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`) and **MUST NOT** be empty.
 
 Keys **SHOULD** remain concise and semantic, revealing their intent and meaning (what the string represents) rather than implementation details or UI element types. Information already conveyed by the scope **SHOULD NOT** be duplicated. Underscores **MAY** be used to separate semantic words for readability. Variants of the same string that differ in detail or length **MAY** use semantic suffixes such as `_short` or `_long` directly in the key, for example, a brief inline error message versus an expanded detailed explanation of the same error.  
 Placeholders **SHOULD** have clear, semantic names that describe the content they represent.
 
 ## 4 Regex
 
-`PLACEHOLDER_REGEX` is a placeholder representing the regular expression that validates the placeholder in the key.
+`PLACEHOLDER_REGEX` is a meta-variable representing the regular expression that validates the placeholder in the key.
 
 ```regex
 ^(?<prefix>[@~#])?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|PLACEHOLDER_REGEX)+)$
@@ -122,7 +122,7 @@ Each example below is independent and represents a separate project.
 - `ui/common/button.cancel`: `Cancel` — Common cancel button in shared UI components.
 - `ui/common/button.submit`: `Submit` — Primary submit action for forms.
 - `ui/dashboard/greeting.welcome_{username}`: `Welcome, {username}!` — Personalized dashboard greeting.
-- `ui/settings/page.title`: `Settings` — Title of the settings page.
+- `ui/settings.graphics`: `Graphics` — Title of the graphics settings page.
 - `marketing/campaign/email_subject.welcome`: `Welcome to our project!` — Welcome email subject.
 - `marketing/footer.unsubscribe_instructions_{unsubscribe_link}`: `To unsubscribe, click {unsubscribe_link}.` — Footer with link placeholder.
 
@@ -139,9 +139,10 @@ Each example below is independent and represents a separate project.
 - `order/confirmation.number_{order_id}`: `Order #{order_id} confirmed.` — Order confirmation with id.
 - `order/confirmation.number_{{order_id}}`: `Order #{{order_id}} confirmed.` — Using double curly braces as placeholder delimiters.
 - `order/confirmation.number_%1$d`: `Order #%1$d confirmed.` — Using printf-style unnamed placeholder syntax with positional argument.
+- `~ui/button.cancel_@username@`: `Cancel @username@` — Placeholder uses prefix characters (`@`).
 - `auth/error.invalid_login_{attempts}`: `Sign in failed. {attempts} attempt(s) remaining.` — Error with dynamic count.
 - `help/message.contact_us_{email_link}`: `For support, please contact us at {email_link}.` — The `{email_link}` placeholder becomes an inline clickable label when rendered.
-- `dialog/prolog/merchant_greeting.welcome`: `Welcome, {player_name}, to my shop!` — In-game dialog with player name placeholder only in translation, not in key.
+- `dialog/prologue/merchant_greeting.welcome`: `Welcome, {player_name}, to my shop!` — Project uses translation-only placeholders (no placeholders in keys).
 
 ### 6.5 Plural / gender / cardinality as sub-scope
 
@@ -165,21 +166,23 @@ Each example below is independent and represents a separate project.
 - `ui/modal/prompt.delete_confirmation`: `Are you sure you want to delete this?` — Modal confirmation prompt.
 - `legal/link.terms_of_service`: `Terms of Service` — Legal link text.
 
-### 6.8 Invalid / discouraged examples
+### 6.8 Invalid examples
 
 - `UI/Button.Cancel`: `Cancel` — Uses uppercase letters in scope and key (keys/scopes **MUST** be lowercase).
 - `ui//button.cancel`: `Cancel` — Empty scope component (no `//` allowed).
 - `ui/button cancel`: `Cancel` — Contains a space in key (only `a-z`, `0-9`, `_` and placeholders allowed).
 - `ui/button..cancel`: `Cancel` — Malformed (extra dot or empty key component).
-- `ui/buttons.cancel`: `Cancel` — Uses plural form of `button` in scope, which is not recommended.
 - `ui/button.cancel_{size-number}`: `Cancel {size-number}` — Hyphen used inside placeholder-like token, placeholder names **MUST** contain only `a-z`, `0-9`, `_`.
 - `ui/button.cancel_{}`: `Cancel` — Empty placeholder (`{}`) is not allowed.
 - `ui/button.cancel_{UserName}`: `Cancel {UserName}` — Placeholder contains uppercase letters, **MUST** be lowercase.
-- `ui/button.cancel_@UserName@`: `Cancel @UserName@` — Placeholder uses reserved characters (`@`).
 - `ui/button.cancel_{username}`: `Cancel {user}` — Placeholders do not match between key and translation (`{username}` vs `{user}`).
 - `@ui/button.cancel` and `ui/button.ok` — Do not mix prefixed and unprefixed SLIs within the same project.
 - `@ui/button.cancel_{username}` and `ui/button.ok_{{username}}` — Do not mix different placeholder delimiter syntaxes within the same project.
 - `order/confirmation.number_{order_id}`: `Order #{order_id} confirmed.` and `order/cancellation.number`: `Order #{order_id} cancelled.` — Do not mix placeholder embedding in keys with placeholders only in translations.
+
+## 6.9 Discouraged examples
+
+- `ui/buttons.cancel`: `Cancel` — Uses plural form of `button` in scope.
 
 ## 7 Definitions
 
@@ -193,6 +196,6 @@ Each example below is independent and represents a separate project.
 
 **Scope** — an optional component of an SLI that groups related keys under a stable functional boundary to prevent naming collisions and provide context.
 
-**Semantic Localization Identifier (SLI)** — a concise, machine-parseable identifier that maps to exactly one translatable unit in a project.
+**Semantic Localization Identifier (SLI)** — a concise, machine-parsable identifier that maps to exactly one translatable unit in a project.
 
 **Translation** — a language-specific version associated with an SLI, which **MAY** include markup or formatting syntax that is interpreted at display time.

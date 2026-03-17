@@ -52,7 +52,7 @@ A prefix **SHOULD** be used when the localization system requires clear differen
 
 The scope is an optional component that groups related SLIs and provides semantic context to prevent naming collisions. It represents a stable functional boundary, such as a feature module, a major UI section, a delivery channel, or a message category. Using a scope allows keys to remain short while still being unambiguous within their context.
 
-Scopes **MUST** consist of one or more components separated by slashes (`/`), with each component composed of lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`). Empty components **MUST NOT** be used (for example, `ui//button`) and a scope **MUST NOT** begin or end with a slash. When present, the scope **MUST** be followed by a literal dot (`.`) that separates it from the key.
+Scopes **MUST** consist of one or more components separated by slashes (`/`), with each component composed of ASCII lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`). Empty components **MUST NOT** be used (for example, `ui//button`) and a scope **MUST NOT** begin or end with a slash. When present, the scope **MUST** be followed by a literal dot (`.`) that separates it from the key.
 
 Top-level scopes **SHOULD** be limited and stable. Scopes **MAY** map to stable project boundaries (features, major UI areas, or channels). Ad hoc scopes and deep nesting **SHOULD** be avoided, as they increase fragmentation and make reuse harder. Sub-scopes **MAY** be used to reflect presentation structure, such as `label`, `button`, or `tooltip`, but **SHOULD NOT** encode implementation-specific variants or technical details (for example, prefer `button` over `texture_button` or `animated_button`). Scope names **SHOULD** use singular nouns (for example `button` instead of `buttons`).  
 If the localization framework supports pluralization or grammatical gender natively, those mechanisms **SHOULD** be used. Sub-scopes for gender variants (for example `female`, `male`, or `neutral`) or pluralization (for example `one` or `other`) **MAY** be used only when the framework provides no native support for these forms. The set of plural sub-scopes **SHOULD** cover all CLDR plural categories required across all target languages of the project. For example, while English requires only `one` and `other`, Arabic requires `zero`, `one`, `two`, `few`, `many`, and `other`. Languages that do not distinguish all defined forms **MAY** map multiple sub-scopes to identical translations.
@@ -61,8 +61,8 @@ If the localization framework supports pluralization or grammatical gender nativ
 
 The key is a required component that uniquely identifies a translatable string within its scope. Placeholders embedded in the key represent dynamic runtime values. Embedding placeholders in the key helps translators identify required dynamic values directly from the identifier and enables direct fallback substitution. When no translation is available, the raw SLI remains functional and testable. Placeholders are framework-agnostic. The placeholder syntax may therefore vary between projects.
 
-Keys **MUST** consist of lowercase letters (`a-z`), digits (`0-9`), underscores (`_`), and placeholders. Keys **MUST NOT** be empty. Keys **MUST** either contain all placeholders when a string has dynamic values, or contain no placeholders at all. Embedding placeholders in keys **SHOULD** be preferred, especially when the raw SLI may be rendered directly as fallback text. When placeholders are embedded, every translation **MUST** contain all placeholders defined in the key, neither omitting nor adding any. Placeholders **MAY** be reordered in the translation text to accommodate different grammatical structures in various languages. Placeholders in the key **MUST** only identify the dynamic runtime value and **MUST NOT** contain formatting instructions. Translations **MAY** include formatting instructions within their placeholders.  
-A project **MUST** use a single, consistent placeholder syntax throughout. The localization framework's native placeholder syntax **SHOULD** be used, but **MUST NOT** contain the structural characters `/` and `.`. The chosen prefix character **MUST NOT** be used in the placeholder syntax, to ensure the prefix remains unambiguous. If the framework's syntax conflicts with all available prefix characters (`@`, `~`, `#`) or reserved characters (`/`, `.`), curly braces `{name}` **SHOULD** be used as delimiters. If neither the native syntax nor curly braces is viable, an arbitrary syntax **MAY** be used or placeholders **MAY** be used in translations only and omitted from keys entirely. Names for named placeholders **MUST** contain only lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`) and **MUST NOT** be empty.
+Keys **MUST** consist of ASCII lowercase letters (`a-z`), digits (`0-9`), underscores (`_`), and placeholders. Keys **MUST NOT** be empty. Within a project, keys **MUST** either contain all placeholders when a string has dynamic values, or contain no placeholders at all. Embedding placeholders in keys **SHOULD** be preferred, especially when the raw SLI may be rendered directly as fallback text. When placeholders are embedded, every translation **MUST** contain all placeholders defined in the key, neither omitting nor adding any. Placeholders **MAY** be reordered in the translation text to accommodate different grammatical structures in various languages. Placeholders in the key **MUST** identify only the dynamic runtime value and **MUST NOT** contain formatting instructions. Translations **MAY** include formatting instructions within their placeholders.  
+A project **MUST** use a single, consistent placeholder syntax throughout. The localization framework's native placeholder syntax **SHOULD** be used, but **MUST NOT** contain the structural characters `/` and `.`. The chosen prefix character **MUST NOT** be used in the placeholder syntax, to ensure the prefix remains unambiguous. If the framework's syntax conflicts with all available prefix characters (`@`, `~`, `#`) or reserved characters (`/`, `.`), curly braces `{name}` **SHOULD** be used as delimiters. If neither the native syntax nor curly braces is viable, an arbitrary syntax **MAY** be used or placeholders **MAY** be used in translations only and omitted from keys entirely. Names for named placeholders **MUST** contain only ASCII lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`) and **MUST NOT** be empty.
 
 Keys **SHOULD** remain concise and semantic, revealing their intent and meaning (what the string represents) rather than implementation details or UI element types. Information already conveyed by the scope **SHOULD NOT** be duplicated. Underscores **MAY** be used to separate semantic words for readability. Variants of the same string that differ in detail or length **MAY** use semantic suffixes such as `_short` or `_long` directly in the key, for example, a brief inline error message versus an expanded detailed explanation of the same error.  
 Placeholders **SHOULD** have clear, semantic names that describe the content they represent.
@@ -70,41 +70,49 @@ Placeholders **SHOULD** have clear, semantic names that describe the content the
 ## 4 Regex
 
 `PLACEHOLDER_REGEX` is a meta-variable representing the regular expression that validates the placeholder in the key.
+`PREFIX_CHAR` is a meta-variable representing the single character used as a prefix in the project, if any.
 
 ```regex
-^(?<prefix>[@~#])?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|PLACEHOLDER_REGEX)+)$
+^(?<prefix>PREFIX_CHAR)?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|PLACEHOLDER_REGEX)+)$
 ```
 
 The regex captures the prefix, scope, and required key components of an SLI. It ensures that the identifier adheres to the specified character sets and structure. This regex **MAY** be used to validate or parse single SLIs. It is not designed to validate multiple SLIs, as it cannot enforce consistent prefix usage or placeholder delimiter syntax across a set of identifiers.
 
-Regex with named placeholders using single curly braces `{}` as delimiters (`PLACEHOLDER_REGEX`: `\{[a-z0-9_]+\}`):
+Regex with named placeholders using single curly braces `{}` as delimiters (`PLACEHOLDER_REGEX`: `\{[a-z0-9_]+\}`) and `@` as the prefix character:
 
 ```regex
-^(?<prefix>[@~#])?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|\{[a-z0-9_]+\})+)$
+^(?<prefix>@)?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|\{[a-z0-9_]+\})+)$
 ```
 
-Regex with named placeholders using double curly braces `{{}}` as delimiters (`PLACEHOLDER_REGEX`: `\{\{[a-z0-9_]+\}\}`):
+Regex with named placeholders using double curly braces `{{}}` as delimiters (`PLACEHOLDER_REGEX`: `\{\{[a-z0-9_]+\}\}`) and `@` as the prefix character:
 
 ```regex
-^(?<prefix>[@~#])?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|\{\{[a-z0-9_]+\}\})+)$
+^(?<prefix>@)?(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|\{\{[a-z0-9_]+\}\})+)$
 ```
 
 ## 5 Backus-Naur Form Grammar
 
 `<placeholder>` is to be defined by the project based on the placeholder syntax in use.
+`<prefix>` is to be defined by the project.
 
 ```bnf
 <SLI> ::= <prefix>? ( <scope> "." )? <key>
-<prefix> ::= "@" | "~" | "#"
 <scope> ::= <scope_part> ( "/" <scope_part> )*
 <scope_part> ::= ( [a-z] | [0-9] | "_" )+
 <key> ::= ( <key_char> | <placeholder> )+
 <key_char> ::= [a-z] | [0-9] | "_"
 ```
 
-Backus-Naur Form with named placeholders using single curly braces `{}` as delimiters:
+Backus-Naur Form with named placeholders using single curly braces `{}` as delimiters and `@` as the prefix character:
 
 ```bnf
+<SLI> ::= <prefix>? ( <scope> "." )? <key>
+<scope> ::= <scope_part> ( "/" <scope_part> )*
+<scope_part> ::= ( [a-z] | [0-9] | "_" )+
+<key> ::= ( <key_char> | <placeholder> )+
+<key_char> ::= [a-z] | [0-9] | "_"
+
+<prefix> ::= "@"
 <placeholder> ::= "{" ( [a-z] | [0-9] | "_" )+ "}"
 ```
 
@@ -142,7 +150,7 @@ Each example below is independent and represents a separate project.
 - `~ui/button.cancel_@username@`: `Cancel @username@` — Placeholder uses prefix characters (`@`).
 - `auth/error.invalid_login_{attempts}`: `Sign in failed. {attempts} attempt(s) remaining.` — Error with dynamic count.
 - `help/message.contact_us_{email_link}`: `For support, please contact us at {email_link}.` — The `{email_link}` placeholder becomes an inline clickable label when rendered.
-- `dialog/prologue/merchant_greeting.welcome`: `Welcome, {player_name}, to my shop!` — Project uses translation-only placeholders (no placeholders in keys).
+- `dialog/prologue/merchant.welcome`: `Welcome, {player_name}, to my shop!` and - `dialog/prologue/merchant.bye`: `Bye for now, take care {player_name}!`  — Project uses translation-only placeholders (no placeholders in keys).
 
 ### 6.5 Plural / gender / cardinality as sub-scope
 
@@ -179,6 +187,7 @@ Each example below is independent and represents a separate project.
 - `@ui/button.cancel` and `ui/button.ok` — Do not mix prefixed and unprefixed SLIs within the same project.
 - `@ui/button.cancel_{username}` and `ui/button.ok_{{username}}` — Do not mix different placeholder delimiter syntaxes within the same project.
 - `order/confirmation.number_{order_id}`: `Order #{order_id} confirmed.` and `order/cancellation.number`: `Order #{order_id} cancelled.` — Do not mix placeholder embedding in keys with placeholders only in translations.
+- `@ui/button.cancel_@username@`: `Cancel @username@` — Do not use prefix characters in placeholder syntax.
 
 ## 6.9 Discouraged examples
 

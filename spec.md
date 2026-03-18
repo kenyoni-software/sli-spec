@@ -50,7 +50,7 @@ The prefix **MAY** be used to facilitate automatic extraction of SLIs from sourc
 
 The scope is an optional element that groups related SLIs and provides semantic context to prevent naming collisions. It represents a stable functional boundary, such as a feature module, a major UI section, a delivery channel, or a message category. Using a scope allows keys to remain short while still being unambiguous within their context.
 
-The scope **MUST** consist of one or more components separated by slashes (`/`), with each component composed of ASCII lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`). Components **MUST NOT** be empty (for example, `ui//button`), and the scope **MUST NOT** begin or end with a slash. When present, the scope **MUST** be followed by a literal dot (`.`) that separates it from the key.
+The scope **MUST** consist of one or more components separated by slashes (`/`), with each component composed of ASCII lowercase letters (`a-z`), digits (`0-9`), or underscores (`_`). Scope components **MUST NOT** be empty (for example, `ui//button`), and the scope **MUST NOT** begin or end with a slash. When present, the scope **MUST** be followed by a literal dot (`.`) that separates it from the key.
 
 Top-level scope components **SHOULD** be limited and stable. They **MAY** map to stable project boundaries (features, major UI areas, or channels). Ad hoc scope components and deep nesting **SHOULD** be avoided, as they increase fragmentation and make reuse harder. Scope components **MAY** be used to reflect presentation structure, such as `label`, `button`, or `tooltip`, but **SHOULD NOT** encode implementation-specific variants or technical details (for example, prefer `button` over `texture_button` or `animated_button`). Scope component names **SHOULD** use singular nouns (for example, `button` instead of `buttons`).  
 If the localization framework supports pluralization or grammatical gender natively, those mechanisms **SHOULD** be used. Scope components for gender variants (for example, `female`, `male`, or `neutral`) or pluralization (for example, `one` or `other`) **SHOULD NOT** be used unless the framework lacks native support. The set of plural scope components **SHOULD** cover all CLDR plural categories required across all target languages of the project. For example, while English requires only `one` and `other`, Arabic requires `zero`, `one`, `two`, `few`, `many`, and `other`. Languages that do not distinguish all defined forms **MAY** map multiple scope components to identical translations.
@@ -90,7 +90,7 @@ Regex with printf-style unnamed placeholders with positional arguments (`PLACEHO
 
 ## 5 Backus-Naur Form Grammar
 
-`<placeholder>` and `<prefix>` are project-defined tokens and that **MUST** be specified by each project according to its chosen placeholder and prefix syntaxes.
+`<placeholder>` and `<prefix>` are project-defined tokens and **MUST** be specified by each project according to its chosen placeholder and prefix syntaxes.
 
 ```bnf
 <SLI> ::= <prefix> ( <scope> "." )? <key>

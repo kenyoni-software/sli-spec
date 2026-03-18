@@ -1,8 +1,7 @@
 # Semantic Localization Identifier (SLI)
 
-![Version](https://img.shields.io/badge/version-1.0--draft-blue)
-![License](https://img.shields.io/badge/license-CC%20BY%204.0-green)
-![Status](https://img.shields.io/badge/status-draft-orange)
+[![Version](https://img.shields.io/badge/Version-1.0-orange)](spec.md)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-blue.svg)](LICENSE.md)
 
 A naming convention for the keys of translatable strings. SLIs are structured, readable keys that tell developers, translators and tooling exactly what a string is and where it belongs — just from the identifier itself.
 

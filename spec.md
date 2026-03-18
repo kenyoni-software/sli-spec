@@ -82,7 +82,7 @@ Regex with named placeholders using single curly braces `{}` as delimiters (`PLA
 ^(?<prefix>@)(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|(?<placeholder>\{[a-z0-9_]+\}))+)$
 ```
 
-Regex with printf-style unnamed placeholders with positional arguments (`PLACEHOLDER_REGEX`: `/%(?:\d+\$)?[dfsu]/`) and `#` as the prefix character:
+Regex with printf-style unnamed placeholders with positional arguments (`PLACEHOLDER_REGEX`: `%(?:\d+\$)?[dfsu]`) and `#` as the prefix character:
 
 ```regex
 ^(?<prefix>#)(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|(?<placeholder>%(?:\d+\$)?[dfsu]))+)$

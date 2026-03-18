@@ -35,6 +35,8 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 
 ## Examples
 
+*Each row is an independent illustration and does not represent a single project.*
+
 | SLI                                             | Translation                                                             |
 | ----------------------------------------------- | ----------------------------------------------------------------------- |
 | `ui/common/button.cancel`                       | Cancel                                                                  |
@@ -45,7 +47,7 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 
 ## Specification
 
-The full specification is in [spec.md](./spec.md).
+The full specification is in [spec.md](spec.md).
 
 Minor editorial changes, such as typo fixes or rewording that does not change the intended meaning, may be made without notice. Breaking changes will always be documented.
 
@@ -56,3 +58,9 @@ Document:
 - the prefix character in use (if any)
 - placeholder syntax (if embedded placeholders are used)
 - common scope naming conventions and patterns (e.g. `ui/`, `auth/`, `error/`)
+
+## License
+
+This specification is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE.md).
+
+This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, even for commercial purposes.

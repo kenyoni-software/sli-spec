@@ -67,14 +67,13 @@ Placeholders **SHOULD** have clear, descriptive names reflecting the content the
 
 ## 4 Regex
 
-`PLACEHOLDER_REGEX` is a meta-variable representing the regular expression that validates the placeholder in the key.
+This regex captures the prefix, scope, and key of an SLI. It ensures that the identifier adheres to the specified character sets and structure. This regex **MAY** be used to validate or parse SLIs.  
+`PLACEHOLDER_REGEX` is a meta-variable representing the regular expression that validates the placeholder in the key.  
 `PREFIX_CHAR` is a meta-variable representing the single character used as a prefix in the project, if any.
 
 ```regex
 ^(?<prefix>PREFIX_CHAR)(?:(?<scope>[a-z0-9_]+(?:\/[a-z0-9_]+)*)\.)?(?<key>(?:[a-z0-9_]|(?<placeholder>PLACEHOLDER_REGEX))+)$
 ```
-
-The regex captures the prefix, scope, and key of an SLI. It ensures that the identifier adheres to the specified character sets and structure. This regex **MAY** be used to validate or parse individual SLIs. It is not designed to validate a collection of SLIs, as it cannot enforce consistent prefix usage or placeholder delimiter syntax across a set of identifiers.
 
 Regex with named placeholders using single curly braces `{}` as delimiters (`PLACEHOLDER_REGEX`: `\{[a-z0-9_]+\}`) and `@` as the prefix character:
 

@@ -11,6 +11,8 @@ A naming convention for the keys of translatable strings. SLIs are structured, r
 [prefix][scope.]key
 ```
 
+### Example
+
 ```text
 @ui/dashboard/greeting.welcome_{username}
 ```
